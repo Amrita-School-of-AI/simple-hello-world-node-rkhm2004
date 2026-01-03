@@ -1,31 +1,28 @@
 #include <chrono>
 #include <functional>
 #include <memory>
-#include <string>
-
 #include "rclcpp/rclcpp.hpp"
 
 using namespace std::chrono_literals;
 
-/*
- * TODO: Create a Class named 'HelloNode' that inherits from rclcpp::Node.
- * Requirements:
- * 1. The constructor should name the node "hello_world_node".
- * 2. Create a timer that triggers every 1000ms (1 second).
- * 3. The timer callback should print "Hello, World!" using the RCLCPP_INFO macro.
- */
-
+// 1. Define the class inheriting from rclcpp::Node
 class HelloNode : public rclcpp::Node
 {
 public:
-  HelloNode()
-  : Node("hello_world_node")
+  HelloNode() : Node("hello_world_node") // 2. Name the node
   {
-    // TODO: Initialize the timer here
+    // 3. Initialize the timer (1000ms = 1 second)
+    timer_ = this->create_wall_timer(
+      1000ms, 
+      std::bind(&HelloNode::timer_callback, this));
   }
 
 private:
-  // TODO: Define the timer_callback function here
+  // 4. Define the callback function
+  void timer_callback()
+  {
+    RCLCPP_INFO(this->get_logger(), "Hello, World!");
+  }
 
   rclcpp::TimerBase::SharedPtr timer_;
 };
